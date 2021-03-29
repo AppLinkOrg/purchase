@@ -5,8 +5,10 @@ import App from './App'
 import router from './router'
 import wx from "weixin-jsapi"; 
 import 'lib-flexible/flexible.js';
+import Vant from 'vant';
+import 'vant/lib/index.css';
 
-
+Vue.use(Vant);
 Vue.prototype.wx = wx
 Vue.config.productionTip = false
 

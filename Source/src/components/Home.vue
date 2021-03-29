@@ -1,8 +1,8 @@
 <template>
-  <div style="min-height: 100vh;background-size:100% 100%;"  :style="{'background-image':tongyi == true ? 'url'+'('+uploadpath+'resource/'+Res.bg+')':''}">
+  <div style="min-height: 100vh;background-size:100% 100%;"  :style="{'background-image':tongyi == true ? 'url'+'('+uploadpath+'xianmu/'+xianmulist.img+')':''}">
 
-<div class="posifix">
-    <div class="margin-left-4x margin-right-4x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="routeto('information')">
+<div class="posifix" v-if="xianmulist.length != 0">
+    <div class="margin-left-4x margin-right-4x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="tiaozhuan">
 立即购买
   </div>
 </div>
@@ -22,15 +22,35 @@ export default {
       Inst: {},
       Member: null,
       tongyi:true,
-     
+      xianmulist:[],
+     Pid:null
     };
   },
   created() {
     PageHelper.Init(this);
+     var str = location.href
+    str = str.substring(str.indexOf("id=")+3,str.indexOf("&"));
+     console.log(str,'location2')
+    this.Pid = str;
+
+    // this.Pid = this.$route.query.id;
+    console.log(location.href,'location')
+    
+    // console.log(this.$route.query.id,'location')
+   
+    HttpHelper.Post("xianmu/xianmulist",{
+      id:this.Pid
+    }).then((xianmulist)=>{
+      this.xianmulist=xianmulist
+    })
    
 
   },
-  methods: {},
+  methods: {
+     tiaozhuan(){
+       this.routeto("/information?id="+this.Pid);
+    }
+  },
 };
 </script>
 <style scoped>

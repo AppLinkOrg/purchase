@@ -19,7 +19,7 @@
       />
     </div>
 
-    <div class="posifix">
+    <div class="posifix" v-if="neironglist.length !=0">
       <div
         class="margin-left-4x margin-right-4x h2 bg-g3 f-g3 h-68 text-center border-34"
         @click="zhifu"
@@ -34,6 +34,7 @@ import Config from "../Config";
 import { PageHelper } from "../PageHelper";
 import { HttpHelper } from "../HttpHelper";
 import { Utils } from "../Utils";
+import { Toast } from "vant";
 import wx from "weixin-jsapi";
 
 export default {
@@ -50,7 +51,7 @@ export default {
   },
   created() {
     PageHelper.Init(this);
-    HttpHelper.Post("neirong/neironglist", {}).then((neironglist) => {
+    HttpHelper.Post("neirong/neironglist", {xianmu_id:this.$route.query.id}).then((neironglist) => {
       for (let item of neironglist) {
         item.answer = "";
       }
@@ -66,6 +67,9 @@ export default {
     zhifu() {
       console.log("loadwechat");
       PageHelper.loadwechat(this);
+
+
+  
          let viewer = window.navigator.userAgent.toLowerCase();
               
 
@@ -73,6 +77,10 @@ export default {
       var neironglist = this.neironglist;
 
       for (let item of neironglist) {
+        if (item.answer == '') {
+           Toast.fail(item.tips);
+           return;
+        }
         var json = {
           neironid: item.id,
           neirondaan: item.answer,
@@ -82,7 +90,8 @@ export default {
       var str = JSON.stringify(jieguo);
       console.log(str, "jieguo");
 
-      HttpHelper.Post("neirong/daan", { str }).then((res) => {
+      var xmid=this.$route.query.id 
+      HttpHelper.Post("neirong/daan", { str,xianmu_id:this.$route.query.id }).then((res) => {
         if (res.code == 0) {
           //  PageHelper.loadwechat(this);
           let viewer = window.navigator.userAgent.toLowerCase();
@@ -120,4 +129,5 @@ export default {
   left: 0;
   width: 100vw;
 }
+
 </style>

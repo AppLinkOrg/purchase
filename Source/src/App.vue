@@ -414,5 +414,8 @@ input {
 input::placeholder {
   color: #c1c1c1 !important;
 }
+.van-toast{
+  width: 250px  !important;
+}
 </style>
 
