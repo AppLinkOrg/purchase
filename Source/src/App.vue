@@ -66,7 +66,9 @@ div {
 .margin-4x {
   margin: 40px;
 }
-
+.margin-top-05 {
+  margin-top: 5px;
+}
 .margin-top-05x {
   margin-top: 10px;
 }
@@ -98,6 +100,12 @@ div {
 .margin-left-4x {
   margin-left: 40px;
 }
+.margin-left-8x {
+  margin-left: 80px;
+}
+.margin-left-10x {
+  margin-left: 80px;
+}
 
 .margin-right-1x {
   margin-right: 10px;
@@ -110,6 +118,12 @@ div {
 }
 .margin-right-4x {
   margin-right: 40px;
+}
+.margin-right-8x {
+  margin-right: 80px;
+}
+.margin-right-10x {
+  margin-right: 100px;
 }
 
 .margin-bottom-1x {

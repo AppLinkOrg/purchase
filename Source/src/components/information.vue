@@ -4,24 +4,69 @@
 
     <div class="margin-top-4x"></div>
     <div
-      class="margin-left-3x margin-right-3x margin-top margin-bottom-4x flex-row"
+      class="margin-left-3x margin-right-3x margin-top margin-bottom-4x"
       v-for="(item, index) in neironglist"
       :key="index"
     >
-      <div class="h2">{{ index + 1 }}.</div>
-      <div class="h2 padding-left" style="flex: none">{{ item.name }}</div>
+      <div class="flex-row flex-center">
+        <div class="h2 margin-top-05">{{ index + 1 }}.</div>
+        <div class="h2 padding-left" style="flex: none">{{ item.name }}</div>
+      </div>
+
       <input
         type="text"
-        class="bd-bottom margin-left"
+        class="bd-bottom margin-left h2 padding-left margin-top"
         :placeholder="item.tips"
-        @click="chuan(item.id)"
+        @click="chuan(item, index)"
         v-model="item.answer"
+        v-if="item.style == 'A'"
       />
+      <input
+        type="text"
+        class="bd-bottom margin-left h2 padding-left margin-top h-46"
+        :placeholder="item.tips"
+        @click="chuan(item, index)"
+        v-model="item.answer"
+        readonly="readonly"
+        v-if="item.style == 'C'"
+      />
+
+      <div
+        class="xz flex-row flex-column"
+        v-show="placexs"
+        v-if="item.style == 'C'"
+      >
+        <div class="flex-1 zz"></div>
+        <van-picker
+          show-toolbar
+          :title="item.tips"
+          :columns="namelist"
+          @cancel="onCancel"
+          @confirm="onConfirm"
+        />
+      </div>
+      <div v-if="item.style == 'B'" class="margin-top margin-left-4x">
+        <van-uploader :after-read="afterRead2">
+          <img
+            class="add"
+            alt=""
+            :src="uploadpath + 'resource/' + Res.add"
+            v-if="frontPic == ''"
+          />
+          <img
+            class="add"
+            alt=""
+            :src="uploadpath + 'tianxie/' + frontPic"
+            v-else
+          />
+        </van-uploader>
+      </div>
+      <div class="" v-if="item.style == 'B'"></div>
     </div>
 
-    <div class="posifix" v-if="neironglist.length !=0">
+    <div class="posifix" v-if="neironglist.length != 0">
       <div
-        class="margin-left-4x margin-right-4x h2 bg-g3 f-g3 h-68 text-center border-34"
+        class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34"
         @click="zhifu"
       >
         立即支付
@@ -35,6 +80,7 @@ import { PageHelper } from "../PageHelper";
 import { HttpHelper } from "../HttpHelper";
 import { Utils } from "../Utils";
 import { Toast } from "vant";
+import Vue from "vue";
 import wx from "weixin-jsapi";
 
 export default {
@@ -45,73 +91,115 @@ export default {
       Member: null,
       daan: [],
       daanid: null,
-
+      yijiname: [],
+      placexs: false,
+      disabled: null,
+      namelist: [],
+      frontPic: "",
+      daanindex: null,
       neironglist: [],
     };
   },
   created() {
     PageHelper.Init(this);
-    HttpHelper.Post("neirong/neironglist", {xianmu_id:this.$route.query.id}).then((neironglist) => {
+    HttpHelper.Post("neirong/neironglist", {
+      xianmu_id: this.$route.query.id,
+    }).then((neironglist) => {
       for (let item of neironglist) {
         item.answer = "";
+        item.img = "";
       }
       this.neironglist = neironglist;
     });
   },
   methods: {
+    onCancel() {
+      this.placexs = false;
+    },
+    onConfirm(picker, value, index) {
+      var neironglist = this.neironglist;
+      var daanindex = this.daanindex;
+      // console.log( neironglist[daanid],'index',daanid)
+      neironglist[daanindex].answer = picker;
+      this.neironglist = neironglist;
+      this.placexs = false;
+    },
+    afterRead2(file) {
+      var that = this;
+      HttpHelper.UploadBase64("tianxie", file.content).then((ret) => {
+        this.frontPic = ret.result;
+        var daanindex = that.daanindex;
+        var neironglist = this.neironglist;
+        neironglist[daanindex].img = ret.result;
+        this.neironglist = neironglist;
+        console.log(ret.result, "result", neironglist);
+      });
+    },
     getList(e) {},
-    chuan(e) {
-      this.daanid = e;
-      console.log(e, "daanid");
+    chuan(item, index) {
+      this.daanid = item.id;
+      var daanindex = index;
+      this.daanindex = daanindex;
+      var arr = [];
+      for (let items of item.stylist) {
+        var name = items.name;
+        arr.push(name);
+      }
+      this.namelist = arr;
+      if (item.style == "C") {
+        this.placexs = true;
+      }
+
+      console.log(item, "daanid");
     },
     zhifu() {
       console.log("loadwechat");
       PageHelper.loadwechat(this);
 
-
-  
-         let viewer = window.navigator.userAgent.toLowerCase();
-              
+      let viewer = window.navigator.userAgent.toLowerCase();
 
       var jieguo = [];
       var neironglist = this.neironglist;
 
       for (let item of neironglist) {
-        if (item.answer == '') {
-           Toast.fail(item.tips);
-           return;
+        if (item.answer == "" && item.style != "B") {
+          Toast.fail(item.tips);
+          return;
         }
         var json = {
           neironid: item.id,
           neirondaan: item.answer,
+          img: item.img,
         };
         jieguo.push(json);
       }
       var str = JSON.stringify(jieguo);
       console.log(str, "jieguo");
 
-      var xmid=this.$route.query.id 
-      HttpHelper.Post("neirong/daan", { str,xianmu_id:this.$route.query.id }).then((res) => {
+      var xmid = this.$route.query.id;
+      HttpHelper.Post("neirong/daan", {
+        str,
+        xianmu_id: this.$route.query.id,
+      }).then((res) => {
         if (res.code == 0) {
           //  PageHelper.loadwechat(this);
           let viewer = window.navigator.userAgent.toLowerCase();
-               if (viewer.match(/MicroMessenger/i) == "micromessenger") {
-              console.log("micromessenger");
-              var openid = window.localStorage.getItem("openid");
-              HttpHelper.Post("wechat/prepay", {
-                order_id: res.result,
-                openid: openid,
-              }).then((payret) => {
-                //alert(JSON.stringify(payret));
-                WeixinJSBridge.invoke("getBrandWCPayRequest", payret, (res) => {
-                  if (res.err_msg == "get_brand_wcpay_request:ok") {
-                    this.routeto("/success?order_id=" + order_id);
-                  }
-                });
+          if (viewer.match(/MicroMessenger/i) == "micromessenger") {
+            console.log("micromessenger");
+            var openid = window.localStorage.getItem("openid");
+            HttpHelper.Post("wechat/prepay", {
+              order_id: res.result,
+              openid: openid,
+            }).then((payret) => {
+              //alert(JSON.stringify(payret));
+              WeixinJSBridge.invoke("getBrandWCPayRequest", payret, (res) => {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                  this.routeto("/success?order_id=" + order_id);
+                }
               });
-              return;
-            }
-      
+            });
+            return;
+          }
         }
       });
     },
@@ -129,5 +217,30 @@ export default {
   left: 0;
   width: 100vw;
 }
-
+.xz {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 99;
+}
+.van-picker__title {
+  line-height: none;
+}
+.zz {
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.3);
+}
+.van-picker {
+  width: 100vw;
+}
+.add {
+  width: 300px;
+  height: 300px;
+}
+.h-46 {
+  /* height: 46px; */
+  background: #fff;
+}
 </style>

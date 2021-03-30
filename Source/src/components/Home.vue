@@ -1,10 +1,14 @@
 <template>
-  <div style="min-height: 100vh;background-size:100% 100%;"  :style="{'background-image':tongyi == true ? 'url'+'('+uploadpath+'xianmu/'+xianmulist.img+')':''}">
-
+<!-- :style="{'background-image':tongyi == true ? 'url'+'('+uploadpath+'xianmu/'+xianmulist.img+')':''}" -->
+  <div style="min-height: 100vh;"  >
+<img class="sucess" alt="" :src="uploadpath + 'xianmu/' + xianmulist.img" style="width:100%" />
+<div class="h-140"></div>
 <div class="posifix" v-if="xianmulist.length != 0">
-    <div class="margin-left-4x margin-right-4x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="tiaozhuan">
+  <div class="padding-bottom-3x"></div>
+    <div class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="tiaozhuan">
 立即购买
   </div>
+  <div class="padding-bottom-3x"></div>
 </div>
 
   </div>
@@ -66,8 +70,12 @@ export default {
 }
 .posifix{
   position:fixed;
-  bottom: 40px;
+  bottom: 0px;
   left: 0;
   width: 100vw;
+  background:#fff
+}
+.h-140{
+  height: 140px;
 }
 </style>
