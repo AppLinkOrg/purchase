@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="margin-top h1 bold text-center">填写信息</div>
+    <div class="margin-top h1 bold text-center f-warn">填写信息</div>
 
     <div class="margin-top-4x"></div>
     <div
@@ -8,10 +8,13 @@
       v-for="(item, index) in neironglist"
       :key="index"
     >
-      <div class="flex-row flex-center">
+    <!-- style="word-wrap:break-all;word-break:break-all" -->
+      <div class="flex-row " >
         <div class="h2 margin-top-05">{{ index + 1 }}.</div>
-        <div class="h2 padding-left" style="flex: none">{{ item.name }}</div>
+        <div class="h2 padding-left" >{{ item.name }}</div>
       </div>
+ <div class="f-g4 padding-bottom margin-left padding-top" v-if="item.buchong != '' ">{{item.buchong}}</div>
+      
 
       <input
         type="text"
@@ -30,6 +33,7 @@
         readonly="readonly"
         v-if="item.style == 'C'"
       />
+      
 
       <div
         class="xz flex-row flex-column"
@@ -37,15 +41,17 @@
         v-if="item.style == 'C'"
       >
         <div class="flex-1 zz"></div>
+         <!-- :title="item.tips" -->
         <van-picker
           show-toolbar
-          :title="item.tips"
+         
           :columns="namelist"
           @cancel="onCancel"
           @confirm="onConfirm"
         />
       </div>
       <div v-if="item.style == 'B'" class="margin-top margin-left-4x">
+        <div class="f-g4 padding-bottom" >{{item.tips}}</div>
         <van-uploader :after-read="afterRead2">
           <img
             class="add"
@@ -64,14 +70,29 @@
       <div class="" v-if="item.style == 'B'"></div>
     </div>
 
-    <div class="posifix" v-if="neironglist.length != 0">
+    <!-- <div class="posifix" v-if="neironglist.length != 0">
       <div
         class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34"
         @click="zhifu"
       >
         立即支付
       </div>
-    </div>
+    </div> -->
+
+    <!-- <div class="h-140"></div> -->
+    <div class="padding-top"></div>
+    <div class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="zhifu"  v-if="neironglist.length != 0">
+立即支付
+  </div>
+  <div class="padding-top"></div>
+<!-- <div class="posifix" v-if="neironglist.length != 0">
+  <div class="padding-bottom-3x"></div>
+    <div class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="zhifu">
+立即支付
+  </div>
+  <div class="padding-bottom-3x"></div>
+</div> -->
+
   </div>
 </template>
 <script>
@@ -194,7 +215,7 @@ export default {
               //alert(JSON.stringify(payret));
               WeixinJSBridge.invoke("getBrandWCPayRequest", payret, (res) => {
                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                  this.routeto("/success?order_id=" + order_id);
+                  this.routeto("/purchasesucess");
                 }
               });
             });
@@ -211,14 +232,15 @@ export default {
   height: 68px;
   line-height: 68px;
 }
-.posifix {
+/* .posifix {
   position: fixed;
   bottom: 40px;
   left: 0;
   width: 100vw;
-}
+} */
 .xz {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0;
@@ -242,5 +264,18 @@ export default {
 .h-46 {
   /* height: 46px; */
   background: #fff;
+}
+.posifix{
+  position:fixed;
+  bottom: 0px;
+  left: 0;
+  width: 100vw;
+  background:#fff
+}
+.h-140{
+  height: 140px;
+}
+.line-50{
+  line-height: 50rpx;
 }
 </style>

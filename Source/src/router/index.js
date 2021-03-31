@@ -11,11 +11,14 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     }, {
       path: '/information',
       name: 'information',
-      component: information
+      component: information,
+      meta:{
+        title:'wwww'
+      }
     }, {
       path: '/purchasesucess',
       name: 'purchasesucess',

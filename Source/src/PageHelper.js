@@ -6,6 +6,7 @@ import {
 import wx from "weixin-jsapi";
 
 export class PageHelper {
+  static title = '2222';
 
   static InWechat = false;
 

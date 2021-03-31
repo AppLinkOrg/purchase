@@ -333,6 +333,7 @@ div {
 .f-w {
   color: white;
 }
+
 .f-d {
   color: #f56c6c;
 }
@@ -354,6 +355,10 @@ div {
 .f-g3 {
   color: #fff;
 }
+.f-g4 {
+  color: #c1c1c1;
+}
+
 .f-w.el-link {
   color: white !important;
 }
