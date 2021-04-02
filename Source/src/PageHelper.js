@@ -4,6 +4,7 @@ import {
 } from "./HttpHelper";
 
 import wx from "weixin-jsapi";
+// const jsApiList = ['onMenuShareAppMessage', 'onMenuShareTimeline']
 
 export class PageHelper {
   static title = '2222';
@@ -52,6 +53,22 @@ export class PageHelper {
         resourcecallback(PageHelper.Res);
       }
     }
+
+    // if (localStorage.getItem('title') == null) {
+    //   var str = location.href
+    //   str = str.substring(str.indexOf("id=")+3,str.indexOf("&"));
+    //   HttpHelper.Post("xianmu/xianmulist",{
+    //     id:str
+    //   }).then((xianmulist)=>{
+    //     localStorage.setItem("title",xianmulist.name);
+    //     document.title=xianmulist.name
+    //     console.log(xianmulist.name,'xianmulist')
+    //   })
+    // }else{
+    //   document.title=localStorage.getItem('title')
+    // }
+
+
 
     if (PageHelper.Inst == null) {
       HttpHelper.Post("inst/info", {}).then((res) => {
@@ -184,11 +201,50 @@ export class PageHelper {
         timestamp: config.timestamp, // 必填，生成签名的时间戳
         nonceStr: config.nonceStr, // 必填，生成签名的随机串
         signature: config.signature, // 必填，签名，见附录1
-        jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        jsApiList: ['scanQRCode', 'onMenuShareTimeline', 'onMenuShareAppMessage']  // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       };
       console.log("wxconfig",config, json);
       wx.config(json);
+// return
+      wx.ready(function () {
+          //分享给朋友
+        wx.onMenuShareAppMessage({
+          title:localStorage.getItem('title'),
+          desc:localStorage.getItem('miaoshu'),
+          link:'',
+          imgUrl:'https://alioss.app-link.org/alucard263096/purchase/xianmu/'+localStorage.getItem('fenxian'),
+          type:'',
+          dataUrl:'',
+          success:function () {
+            console.log('分享给朋友成功')
+          },
+          cancel:function () {
+            console.log('分享给朋友失败')
+          },
+          fail:function (re) {
+            console.log(re,'分享给朋友成功11')
+          }
+
+
+        })
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+          title: localStorage.getItem('title'), // 分享时的标题
+          link: '',
+          imgUrl:'https://alioss.app-link.org/alucard263096/purchase/xianmu/'+localStorage.getItem('fenxian'),
+          success: function () {
+            console.log("分享成功");
+
+          },
+          cancel: function () {
+            console.log("取消分享");
+          }
+        });
+
+      })
     });
+
+    
   }
 
   static loadwechat(page) {

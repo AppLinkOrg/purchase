@@ -17,7 +17,7 @@ export default new Router({
       name: 'information',
       component: information,
       meta:{
-        title:'wwww'
+        title:'H5购买'
       }
     }, {
       path: '/purchasesucess',

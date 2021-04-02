@@ -30,8 +30,14 @@ export default {
      Pid:null
     };
   },
+    mounted(){ 
+    // PageHelper.loadwechat(this);
+    //  PageHelper.loadwechatconfig(this);
+    
+    },
   created() {
     PageHelper.Init(this);
+    // PageHelper.loadwechatconfig(this);
      var str = location.href
     str = str.substring(str.indexOf("id=")+3,str.indexOf("&"));
      console.log(str,'location2')
@@ -45,6 +51,11 @@ export default {
     HttpHelper.Post("xianmu/xianmulist",{
       id:this.Pid
     }).then((xianmulist)=>{
+      localStorage.setItem("title",xianmulist.name);
+      localStorage.setItem("fenxian",xianmulist.fenxian);
+      localStorage.setItem("miaoshu",xianmulist.miaoshu);
+      PageHelper.loadwechatconfig(this);
+      document.write=xianmulist.name
       this.xianmulist=xianmulist
     })
    

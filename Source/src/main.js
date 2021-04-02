@@ -21,10 +21,10 @@ new Vue({
 })
 
 // router.beforeEach((to, from, next) => {
-
-//   if (to.meta.title) {
-//     document.title = to.meta.title
+//   if (localStorage.getItem('title') !=null) {
+//     document.title = localStorage.getItem('title')
 //   }
 //   console.log()
 //   next()
 // })
+
