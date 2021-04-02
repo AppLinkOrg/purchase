@@ -12,6 +12,7 @@ import Config from "../Config";
 import { PageHelper } from "../PageHelper";
 import { HttpHelper } from "../HttpHelper";
 import { Utils } from "../Utils";
+import wx from "weixin-jsapi";
 
 export default {
   data() {
@@ -21,8 +22,12 @@ export default {
       Member: null,
     };
   },
+ mounted() {
+     wx.hideOptionMenu();
+  },
   created() {
     PageHelper.Init(this);
+     document.title= localStorage.getItem('title')
   },
   methods: {},
 };

@@ -131,9 +131,12 @@ export default {
       neironglist: [],
     };
   },
-
+mounted() {
+     wx.hideOptionMenu();
+  },
   created() {
     PageHelper.Init(this);
+     document.title= localStorage.getItem('title')
     // PageHelper.loadwechat(this);
     HttpHelper.Post("neirong/neironglist", {
       xianmu_id: this.$route.query.id,

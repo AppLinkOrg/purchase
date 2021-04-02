@@ -1,6 +1,6 @@
 <template>
 <!-- :style="{'background-image':tongyi == true ? 'url'+'('+uploadpath+'xianmu/'+xianmulist.img+')':''}" -->
-  <div style="min-height: 100vh;"  >
+  <div style="min-height: 100vh;"  v-wechat-title="this.title">
 <img class="sucess" alt="" :src="uploadpath + 'xianmu/' + xianmulist.img" style="width:100%" />
 <div class="h-140"></div>
 <div class="posifix" v-if="xianmulist.length != 0">
@@ -27,7 +27,8 @@ export default {
       Member: null,
       tongyi:true,
       xianmulist:[],
-     Pid:null
+     Pid:null,
+     title:''
     };
   },
     mounted(){ 
@@ -55,8 +56,9 @@ export default {
       localStorage.setItem("fenxian",xianmulist.fenxian);
       localStorage.setItem("miaoshu",xianmulist.miaoshu);
       PageHelper.loadwechatconfig(this);
-      document.write=xianmulist.name
+      // document.write=xianmulist.name
       this.xianmulist=xianmulist
+      this.title=xianmulist.name
     })
    
 

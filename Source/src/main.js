@@ -8,6 +8,16 @@ import 'lib-flexible/flexible.js';
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
+import VueWechatTitle from 'vue-wechat-title'
+Vue.use(VueWechatTitle);
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  // console.log()
+  next()
+})
+
 Vue.use(Vant);
 Vue.prototype.wx = wx
 Vue.config.productionTip = false
