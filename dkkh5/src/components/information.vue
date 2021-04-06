@@ -54,8 +54,12 @@
             />
           </div>
 
-          <div v-if="item.style == 'B'" class="margin-top margin-left-4x" @click="dianji(index)">
-            <van-uploader :after-read="afterRead2" >
+          <div
+            v-if="item.style == 'B'"
+            class="margin-top margin-left-4x"
+            @click="dianji(index)"
+          >
+            <van-uploader :after-read="afterRead2">
               <img
                 class="add"
                 alt=""
@@ -126,17 +130,18 @@ export default {
       disabled: null,
       namelist: [],
       frontPic: "",
-      imgindex:null,
+      imgindex: null,
+      order_id: null,
       daanindex: null,
       neironglist: [],
     };
   },
-mounted() {
-     wx.hideOptionMenu();
+  mounted() {
+    wx.hideOptionMenu();
   },
   created() {
     PageHelper.Init(this);
-     document.title= localStorage.getItem('title')
+    document.title = localStorage.getItem("title");
     // PageHelper.loadwechat(this);
     HttpHelper.Post("neirong/neironglist", {
       xianmu_id: this.$route.query.id,
@@ -146,9 +151,8 @@ mounted() {
         item.img = "";
       }
       this.neironglist = neironglist;
-      console.log(neironglist,'neironglist')
+      console.log(neironglist, "neironglist");
     });
-    
   },
   methods: {
     onCancel() {
@@ -162,9 +166,9 @@ mounted() {
       this.neironglist = neironglist;
       this.placexs = false;
     },
-    dianji(e){
-      this.imgindex=e
- console.log(e,'neirongliswwwt')
+    dianji(e) {
+      this.imgindex = e;
+      console.log(e, "neirongliswwwt");
     },
     afterRead2(file) {
       var that = this;
@@ -175,7 +179,7 @@ mounted() {
         var neironglist = this.neironglist;
         neironglist[imgindex].img = ret.result;
         this.neironglist = neironglist;
-        console.log(ret.result, "result", neironglist,imgindex);
+        console.log(ret.result, "result", neironglist, imgindex);
       });
     },
     getList(e) {},
@@ -204,26 +208,27 @@ mounted() {
       var jieguo = [];
       var neironglist = this.neironglist;
 
-     
- var xjiage = 0;
+      var xjiage = 0;
       for (let item of neironglist) {
-        if (item.answer == "" && item.style != "B" && item.isbitian_value == "Y") {
+        if (
+          item.answer == "" &&
+          item.style != "B" &&
+          item.isbitian_value == "Y"
+        ) {
           Toast.fail(item.tips);
           return;
         }
-        if (item.style == "B" && item.img =='' && item.isbitian_value == "Y") {
-          Toast.fail('请上传照片');
-           return;
+        if (item.style == "B" && item.img == "" && item.isbitian_value == "Y") {
+          Toast.fail("请上传照片");
+          return;
         }
 
         if (item.style == "C") {
-           for (let xitems of item.stylist) {
-            if ( item.answer==xitems.name) {
-               xjiage = xjiage*1+xitems.price*1;
+          for (let xitems of item.stylist) {
+            if (item.answer == xitems.name) {
+              xjiage = xjiage * 1 + xitems.price * 1;
             }
-
-           }
-         
+          }
         }
 
         var json = {
@@ -233,8 +238,8 @@ mounted() {
         };
         jieguo.push(json);
       }
-//               console.log(xjiage,'xjiage')
-// return
+      //               console.log(xjiage,'xjiage')
+      // return
       var str = JSON.stringify(jieguo);
       console.log(str, "jieguo");
 
@@ -245,26 +250,9 @@ mounted() {
         xjiage,
       }).then((res) => {
         if (res.code == 0) {
+          this.order_id = res.result;
           //  PageHelper.loadwechat(this);
           let viewer = window.navigator.userAgent.toLowerCase();
-          // if (viewer.match(/MicroMessenger/i) == "micromessenger") {
-          //   console.log("micromessenger");
-          //   var openid = window.localStorage.getItem("openid");
-          //   HttpHelper.Post("wechat/prepay", {
-          //     order_id: res.result,
-          //     openid: openid,
-          //   }).then((payret) => {
-          //     //alert(JSON.stringify(payret));
-          //     WeixinJSBridge.invoke("getBrandWCPayRequest", payret, (res) => {
-          //       if (res.err_msg == "get_brand_wcpay_request:ok") {
-          //         this.routeto("/purchasesucess?id=id");
-          //       }
-          //     });
-          //   });
-          //   return;
-          // }
-
-            // let viewer = window.navigator.userAgent.toLowerCase();
           if (viewer.match(/MicroMessenger/i) == "micromessenger") {
             console.log("micromessenger");
             var openid = window.localStorage.getItem("openid");
@@ -283,14 +271,23 @@ mounted() {
           } else {
             HttpHelper.Post("wechat/prepay1", { order_id: res.result }).then(
               (ret) => {
-                // this.checkpay();
+                this.checkpay();
                 window.open(ret.return);
               }
             );
             // echat/prepay1
           }
-
-
+        }
+      });
+    },
+    checkpay() {
+      HttpHelper.Post("order/info", { id: this.order_id }).then((ret) => {
+        if (ret.zhifu == "B") {
+          this.routeto("/purchasesucess?id=id");
+        } else {
+          setTimeout(() => {
+            this.checkpay();
+          }, 1000);
         }
       });
     },
