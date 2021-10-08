@@ -5,7 +5,7 @@
 <div class="h-140"></div>
 <div class="posifix" v-if="xianmulist.length != 0">
   <div class="padding-bottom-3x"></div>
-    <div class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34 " @click="tiaozhuan">
+    <div class="margin-left-10x margin-right-10x f-38 bg-g4 f-g3 h-68 text-center border-34 " @click="tiaozhuan">
 立即购买
   </div>
   <div class="padding-bottom-3x"></div>
@@ -84,8 +84,8 @@ export default {
     
 }
 .h-68{
-  height: 68px;
-  line-height: 68px;
+  height: 80px;
+  line-height: 80px;
 }
 .posifix{
   position:fixed;

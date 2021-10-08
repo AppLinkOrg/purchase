@@ -1,10 +1,17 @@
 <template>
-  <div>
-    <div class="margin-top-100"></div>
-    <img class="sucess" alt="" :src="uploadpath + 'resource/' + Res.sucess" />
-    <div class="h1 text-center  bold margin-top">购买成功</div>
+  <div :style="{'background-image':'url'+'('+uploadpath+'resource/'+Res.bg+')'}" style="background-size:100% 100%;min-height:100vh ">
+  <div class="flex-row flex-center " style="min-height:100vh">
+
+      <div class="" style="width:100vw">
+      <!-- <div class="padding-top-100"></div> -->
+    <img class="sucess" alt="" :src="uploadpath + 'resource/' + Res.ti1" />
+    <div class="f-56 text-center  bold margin-top-4x margin-bottom-4x">购买成功</div>
     <div class="margin-top"></div>
-    <div  class="h1 text-center   w-360">{{Inst.chenggong}}</div>
+    <div  class="f-38 text-center  f-g2  " v-html="Inst.chenggong"></div>
+     <div class="padding-top-100"></div>
+      <div class="padding-top-100"></div>
+    </div>
+  </div>
   </div>
 </template>
 <script>
@@ -35,8 +42,8 @@ export default {
 <style scoped>
 .sucess {
   display: block;
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  /* height: 160px; */
   margin: auto;
 }
 .w-360{

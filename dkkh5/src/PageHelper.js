@@ -72,6 +72,7 @@ export class PageHelper {
 
     if (PageHelper.Inst == null) {
       HttpHelper.Post("inst/info", {}).then((res) => {
+        res.chenggong=res.chenggong.replace(/(\r\n|\n|\r)/gm , "<br />");
         page.Inst = res;
         PageHelper.Inst = res;
 

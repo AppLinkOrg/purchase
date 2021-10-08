@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import information from '@/components/information'
 import purchasesucess from '@/components/purchasesucess'
+import ceshi from '@/components/ceshi'
+
+
 
 Vue.use(Router)
 
@@ -23,6 +26,10 @@ export default new Router({
       path: '/purchasesucess',
       name: 'purchasesucess',
       component: purchasesucess
+    }, {
+      path: '/ceshi',
+      name: 'ceshi',
+      component: ceshi
     }
   ]
 })

@@ -164,7 +164,9 @@ div {
 .padding-top-4x {
   padding-top: 40px;
 }
-
+.padding-top-100 {
+  padding-top: 100px;
+}
 .padding-left-1x {
   padding-left: 10px;
 }
@@ -257,6 +259,12 @@ div {
 .bolder {
   font-weight: bolder;
 }
+.f-56 {
+  font-size: 56px;
+}
+.f-38 {
+  font-size: 38px;
+}
 .h1 {
   font-size: 44px;
 }
@@ -330,6 +338,9 @@ div {
 .bg-g3 {
   background: #FAAb0c;
 }
+.bg-g4 {
+  background:rgba(8, 45, 126, 1);
+}
 .f-w {
   color: white;
 }
@@ -357,6 +368,9 @@ div {
 }
 .f-g4 {
   color: #c1c1c1;
+}
+.f-g5 {
+  color: rgba(8, 45, 126, 1);
 }
 
 .f-w.el-link {

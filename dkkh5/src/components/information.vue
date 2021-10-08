@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="margin-top h1 bold text-center f-warn">填写信息</div>
+    <div class="margin-top h1 bold text-center f-g5">填写信息</div>
 
     <div class="margin-top-4x"></div>
     <div
@@ -92,7 +92,7 @@
     <!-- <div class="h-140"></div> -->
     <div class="padding-top"></div>
     <div
-      class="margin-left-10x margin-right-10x h2 bg-g3 f-g3 h-68 text-center border-34"
+      class="margin-left-10x margin-right-10x f-38 bg-g4 f-g3 h-68 text-center border-34"
       @click="zhifu"
       v-if="neironglist.length != 0"
     >
@@ -269,10 +269,11 @@ export default {
             });
             return;
           } else {
-            HttpHelper.Post("wechat/prepay1", { order_id: res.result }).then(
-              (ret) => {
-                this.checkpay();
-                window.open(ret.return);
+            HttpHelper.Post("wechat/prepay1", { order_id: res.result }).then((prepay1) => {
+                // this.checkpay();
+                alert(prepay1.return)
+                console.log(prepay1.return,'return')
+                window.open(prepay1.return);
               }
             );
             // echat/prepay1
@@ -296,8 +297,8 @@ export default {
 </script>
 <style scoped>
 .h-68 {
-  height: 68px;
-  line-height: 68px;
+  height: 80px;
+  line-height: 80px;
 }
 /* .posifix {
   position: fixed;
